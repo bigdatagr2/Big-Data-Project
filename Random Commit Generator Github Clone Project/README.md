@@ -4,11 +4,13 @@
 # Data download for elasticsearch
 
 - Using githubarchives files
-Motivation of choice:
+
+choice Motivation :
+
 * Commits
 * detail of the events
 
-- Recovery method:
+- Download method:
 * Script bash
 
 wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.json.gz
@@ -16,22 +18,22 @@ wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.jso
 # Elasticsearch server configuration
 
 - Docker
-- Ubana
+- Kibana
 - dockerfile
 - Server environment:
 
 * Elasticsearch version 6.2
-Kibana
+* Kibana
 * Logstash
 
 # Creation and indexing of the database
 
-- parametrage d’index github
-- script d’indexation
+- github index  configuration 
+- indexation script
 
-* use of gzip +
+* use of gzip + zcat
 * REST api d’elasticsearch
-* python script : Post par requests
+* python script : by Post web requests
 * sending slices of 10,000 lines
 * automatic creation of metadata before POST
 
@@ -41,7 +43,7 @@ Kibana
 - reduction name of replicas
 - remodeling of the mapping
 
-* remove nested index with ignore above which explodes the number of fields
+* remove nested index with "ignore above: 250" which explodes the number of fields
 * creation dynamic templates des mapping
 
 - increase of mapping.total_fields.limit to 2000
@@ -55,7 +57,7 @@ Kibana
 * by script
 * On Kibana
 
-- attempt to desindex the fields ending with * url without the index
+- attempt to remove from index fields ending with * url without the index
 
 # 2. GENERATOR OF COMMITS AND RANDOM FILES
 
@@ -79,10 +81,10 @@ Kibana
 - SSH access with shared public key
 - flask server installation with python 2.7
 - port opening setting 5000 for all net 0.0.0.0, :: / 0
-- installation jupyter notebook with opening ports 9999 for all net 0.0.0.0, :: / 0
+- installation of jupyter notebook with opening ports 9999 for all net 0.0.0.0, :: / 0
 - installation of the necessary python libraries
-- Using socketio to display POST data
-- Sending data on MQTT
+- Using socketio to display POST data in realtime
+- Sending data to MQTT
 
 # Random generation of commits and queues
 
