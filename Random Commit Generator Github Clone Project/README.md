@@ -5,13 +5,11 @@
 
 - Utilisation de fichiers de githubarchives
 Motivation du choix:
-
-- Commits
-- détail des Events
+    * Commits
+    * détail des Events
 
 - Méthode de récupération: 
-
-- Script bash
+    * Script bash
 
  wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.json.gz
 
@@ -22,20 +20,20 @@ Motivation du choix:
 - dockerfile
 - Environnement serveur:
 
-- Elasticsearch version 6.2
-- Kibana
-- Logstash
+     * Elasticsearch version 6.2
+     * Kibana
+     * Logstash
 
 # Création et indexation de la base de données
 
 - parametrage d’index github
 - script d’indexation
 
-- utilisation de gzip + 
-- REST api d’elasticsearch	
-- python script : Post par requests
-- envoi de tranches de 10.000 lignes
-- création automatique de métadonnées  avant POST
+    * utilisation de gzip + 
+    * REST api d’elasticsearch	
+    * python script : Post par requests
+    * envoi de tranches de 10.000 lignes
+    * création automatique de métadonnées  avant POST
 
 # Calibrage du serveur et mapping
 
@@ -43,8 +41,8 @@ Motivation du choix:
 - reduction nombre de replicas
 - remodelage du mapping
 
-- suppression des nested index avec ignore above qui fait exploser le nombre des fields
-- creation dynamic templates des mapping
+    * suppression des nested index avec ignore above qui fait exploser le nombre des fields
+    * creation dynamic templates des mapping
 
 - augmentation du mapping.total_fields.limit à 2000
 
@@ -54,9 +52,8 @@ Motivation du choix:
 - Mapping : limitation des champs text, privilegier les keyword
 - reindexation avec alias
 - analyse du mapping 
-
-- par script
-- par kibana
+    * par script
+    * par kibana
 
 - tentative de desindexation des champs se terminant par *url sans repose de l’index
 
@@ -66,10 +63,10 @@ Motivation du choix:
 
 - Test d’aggregates sur terms
 
-- Event types
-- Repositories
-- Users
-- language ...
+    * Event types
+    * Repositories
+    * Users
+    * language ...
 
 - suppression des unassigned_shards
 - changement de refresh_interval pour booster indexation
