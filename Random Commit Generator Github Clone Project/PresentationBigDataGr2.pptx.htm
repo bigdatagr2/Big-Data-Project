@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/transitional.dtd">
+<!-- saved from url=(0079)file:///tmp/lu12360xapovm.tmp/lu12360xapovy.tmp/PresentationBigDataGr2.pptx.htm -->
+<html class="translated-ltr"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+  
+  <title></title>
+  <meta name="generator" content="LibreOffice 5.4.5.1 (Linux)">
+  <meta name="created" content="00:00:00">
+  <meta name="changed" content="00:00:00">
+<link type="text/css" rel="stylesheet" charset="UTF-8" href="./PresentationBigDataGr2.pptx_files/translateelement.css"></head>
+<body>
+<h1><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Project</font></font></b></h1>
+<h1 style="page-break-before:always; "></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Database</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">MQTT</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Recommendation Engine</font></font></li>
+<h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">4. Search engine</font></font></h2>
+<h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">5. Basic analysis</font></font></h2>
+<h2><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">6. Machine learning</font></font></h2>
+</ul>
+<h1 style="page-break-before:always; "></h1>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">1. DATABASE</font></font></b></h1>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Data download for elasticsearch</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Using githubarchives files Motivation of choice:</font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">commits</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">detail of the events</font></font></li>
+</ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Recovery method: </font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Bash script</font></font></li>
+<h2><i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.json.gz</font></font></i></h2>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Parameterization of the elasticsearch server</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docker</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Kibana</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">dockerfile</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Server environment:</font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Elasticsearch version 6.2</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Kibana</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Logstash</font></font></li>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Creating and indexing the database</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">github indexing</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">indexing script</font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">use of gzip + </font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">REST elasticsearch API	</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">python script: Post by requests</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Sending slices of 10,000 lines</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">automatic creation of metadata before POST</font></font></li>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Server calibration and mapping</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">reduction number of shards</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">reduction number of replicas</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">remodeling of the mapping</font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">removing nested index with ignore above which explodes the number of fields</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">creation dynamic templates mapping</font></font></li>
+</ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">increased mapping.total_fields.limit to 2000</font></font></li>
+</ul>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Server calibration and mapping (2)</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Server saturation:</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Mapping: limitation of text fields, privilegier the keyword</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">reindexation with alias</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">mapping analysis </font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">by script</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">by kibana</font></font></li>
+</ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">desindexing the fields ending with * url without rests index</font></font></li>
+</ul>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">2. GENERATOR OF COMMITS AND RANDOM WIRES</font></font></b></h1>
+<h1 style="page-break-before:always; "><b><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Base test, query and calibration</font></font></b></h1>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Aggregates test on terms</font></font></li>
+<ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Event types</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">repositories</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Users</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">language ...</font></font></li>
+</ul>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">removing unassigned_shards</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">refresh_interval change to boost indexing</font></font></li>
+<li><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">storage overflow above 80% free space (88 Gb) - goes into readonly mode, disable_allocation</font></font></li>
+<li>récupération du mode normal - paramètre : index.routing.allocation.disable_allocation": False</li>
+</ul>
+<h1 style="page-break-before:always; "><b>Création et paramétrage serveur web </b></h1>
+<ul>
+<li>souscription à un serveur web type EC2 amazon AWS</li>
+<li>accès SSH avec clé publique partagé </li>
+<li>installation serveur flask avec python 2.7</li>
+<li>parametrage ouverture des ports 5000 pour all net 0.0.0.0,::/0</li>
+<li>installation jupyter notebook  avec ouverture ports 9999 pour all net 0.0.0.0,::/0</li>
+<li>installation des librairies pythons nécessaires  </li>
+<li>Utilisation de socketio pour afficher les data des POST</li>
+<li>Envoi des données sur MQTT</li>
+</ul>
+<h1 style="page-break-before:always; "><b>Génération aléatoire de commits et files</b></h1>
+<ul>
+<li>Script en python à partir du serveur elasticsearch</li>
+<li>lancement en background process avec nohup</li>
+<li>envoi en post des commits aléatoires à partir de la base de donnée elasticsearch</li>
+<li>réception et traitement au niveau du serveur web Flask</li>
+<li>affichage en temps réel des commits par websockets (limité à 10 lignes puis flush)</li>
+<li>transmission du contenu au serveur MQTT avec topic différent selon Repository et Type de Event.</li>
+<li>Souscription testée par MQTTFX , client MQTT linux</li>
+</ul>
+<h1 style="page-break-before:always; "><b>Creation et parametrage serveur MQTT </b></h1>
+<ul>
+<li>souscription à un serveur web type EC2 amazon AWS</li>
+<li>accès SSH avec clé publique partagé </li>
+<li>installation docker mqtt eclipse mosquitto, avec publish des ports</li>
+<li>parametrage ouverture des ports 1883 et 9001 pour all net 0.0.0.0/::00</li>
+<li>tentative de servir en HTTPS websocket en 8000, non concluant pour un test connection HIVEMQTT web client</li>
+</ul>
+<h1 style="page-break-before:always; "><b>CONCLUSION</b></h1>
+<ul>
+<li>Elasticsearch : <a href="http://88.169.46.187:9200/"><u>http://88.169.46.187:9200/</u></a></li>
+<li>Kibana : <a href="http://88.169.46.187:9200/"><u>http://88.169.46.187:5601/</u></a></li>
+<li>Serveur web : <a href="http://34.215.22.13:5000/"><u>http://34.215.22.13:5000/</u></a></li>
+<li>Serveur MQTT : 18.188.23.129:1883</li>
+</ul>
+<h1 style="page-break-before:always; "></h1>
+<h1 style="page-break-before:always; "><b>4. Construction d’un moteur de recherche</b></h1>
+<h1 style="page-break-before:always; "><b>Téléchargement des données</b></h1>
+<ul>
+<li>Utilisation de Google Cloud BigQuery</li>
+<li>Récupération des données: </li>
+<ul>
+<ul>
+<li>Projet: bigquery-public-data</li>
+<li>Dataset: github_repos</li>
+<li>Tables: commits, contents, files, languages</li>
+<li>Téléchargement au format <i>json</i></li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Creation du Dataset</b></h1>
+<ul>
+<li>Choix de plusieurs repository:</li>
+<ul>
+<ul>
+<li> tensorflow/tensorflow</li>
+<li> facebook/react</li>
+<li> twbs/bootstrap</li>
+<li> apple/swift</li>
+<li> Microsoft/vscode</li>
+<li> torvalds/linux</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Creation du Dataset</b></h1>
+<ul>
+<li>Relation entre les tables:</li>
+<ul>
+<ul>
+<li>commits - languages</li>
+<li>contents - files - languages (binary = false)</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Elasticsearch</b></h1>
+<h2>Création d’un mapping dynamique pour contrôler le type de chaque field:</h2>
+<ul>
+<ul>
+<li>date_detection: true</li>
+<li>numeric_detection: true</li>
+<li>dynamic_templates: </li>
+<ul>
+<li> path_match (name, date)</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Elasticsearch</b></h1>
+<ul>
+<li>Preparation des données:</li>
+<ul>
+<li>metadata: </li>
+<h2>{"_index": "bigdata-commits", "_type":"data", "_id": i}</h2>
+<li>data: </li>
+<h2>	{"field1": "valeur1", "field2":"valuer2", "filed3": “valeur3”,…}</h2>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Elasticsearch</b></h1>
+<ul>
+<ul>
+<li>Indexation du dataset:</li>
+<ul>
+<li>_bulk</li>
+<li>limite d’indexation de 10000 lignes</li>
+<li>utilisation d’un HTTP post: requests.post (python) pour ajouter les données sur le serveur elasticsearch</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Construction d’un moteur de recherche</b></h1>
+<ul>
+<li>Utilisation de l’application flask comme framework web qui construit un rendu html</li>
+<li>Préparation de query pour chaque table</li>
+<ul>
+<ul>
+<li>bool: should</li>
+<li>trouver des phrases ou un simple mot</li>
+<li>multi_match pour différents fields en même temps</li>
+<li>pertinence du score</li>
+<li>agrégations pour le langage</li>
+<li>normaliser les données en minuscule pour ne pas être sensible à la casse (pendant le mapping) </li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Création du Dashboard</b></h1>
+<ul>
+<li> Création de différents graphes</li>
+<ul>
+<ul>
+<li>nombre de commits par jour pendant un mois (janvier 2018)</li>
+<li>nombre de commits par jour pendant un mois contenant:</li>
+<ul>
+<li>repository name</li>
+<li>language</li>
+<li>committer name </li>
+</ul>
+<li>nombre de commits par seconde pendant 15 minutes</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Les problèmes</b></h1>
+<ul>
+<li>Le gros volume de données</li>
+<li>Les relations entre les tables</li>
+<li>La transformation des données pour pouvoir les injecter dans elasticsearch</li>
+</ul>
+<h1 style="page-break-before:always; "><b>Conclusion</b> </h1>
+<h2>    http://34.215.22.13:5000/search/</h2>
+<h1 style="page-break-before:always; "><b>5. Analyse basique</b></h1>
+<h1 style="page-break-before:always; "><b>Appréhender la donnée</b></h1>
+<ul>
+<li>Téléchargement de quelques githubarchives sur Google Big Query en local </li>
+<li>Dezipper les fichiers </li>
+<li>Utilisation de R (sur un notebook jupyter)</li>
+<ul>
+<ul>
+<li>Mettre les données d’un fichier dans un dataframe  </li>
+<li>Regarder les types de variables, leur contenu, la raison des variables vides (majoritairement dû au type d’event)</li>
+<li>Comprendre les connections entre les variables </li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Téléchargement des données</b></h1>
+<ul>
+<li>Téléchargement de githubarchives</li>
+<li>Récupération des données via un programme en R par une boucle: </li>
+<ul>
+<ul>
+<li>Dezippage d’un githubarchive</li>
+<li>Sélection des variables qui importent pour l’analyse</li>
+<li>Ajout de la sélection dans la base de données finale </li>
+<li>Suppression du fichier dézippé (pour ne pas prendre trop de place)</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Analyse de la Base de données</b></h1>
+<ul>
+<li>Utilisation d’un programme R pour: </li>
+<ul>
+<ul>
+<li>créer de nouvelles variables plus facile d’utilisation (nouvelle variable date à partir de created_at)</li>
+<li>réaliser quelques analyses basiques:</li>
+<ul>
+<li>xxxx</li>
+<li>xxxx</li>
+</ul>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Visualisation des stats</b></h1>
+<ul>
+<li>Utilisation de R shiny: </li>
+<ul>
+<ul>
+<li>xxxx </li>
+<li>xxxx</li>
+<li>xxxx</li>
+<li>xxxx </li>
+<li>xxxx</li>
+</ul>
+</ul>
+</ul>
+<h1 style="page-break-before:always; "><b>Problèmes rencontrés</b></h1>
+<ul>
+<li>Volume de données trop important pour garder en local</li>
+<li>Echec d’une connection directe sur Google big Query</li>
+<li>Difficulté pour la mise en place de shiny</li>
+</ul><div id="goog-gt-tt" class="skiptranslate" dir="ltr"><div style="padding: 8px;"><div><div class="logo"><img src="./PresentationBigDataGr2.pptx_files/translate_24dp.png" width="20" height="20" alt="Google Traduction"></div></div></div><div class="top" style="padding: 8px; float: left; width: 100%;"><h1 class="title gray">Texte d'origine</h1></div><div class="middle" style="padding: 8px;"><div class="original-text"></div></div><div class="bottom" style="padding: 8px;"><div class="activity-links"><span class="activity-link">Proposer une meilleure traduction</span><span class="activity-link"></span></div><div class="started-activity-container"><hr style="color: #CCC; background-color: #CCC; height: 1px; border: none;"><div class="activity-root"></div></div></div><div class="status-message" style="display: none;"></div></div>
+
+<div class="goog-te-spinner-pos"><div class="goog-te-spinner-animation"><svg xmlns="http://www.w3.org/2000/svg" class="goog-te-spinner" width="96px" height="96px" viewBox="0 0 66 66"><circle class="goog-te-spinner-path" fill="none" stroke-width="6" stroke-linecap="round" cx="33" cy="33" r="30"></circle></svg></div></div></body></html>
