@@ -1,6 +1,5 @@
-```html
-
 # 1. BASE DE DONNÉES
+===================
 
 # Téléchargement des données pour elasticsearch
 
@@ -14,7 +13,7 @@ Motivation du choix:
 
 - Script bash
 
-## wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.json.gz
+ wget -c http://data.githubarchive.org/{2016..2018}-{01..12}-{01..31}-{0..23}.json.gz
 
 # Parametrage du serveur elasticsearch
 
@@ -112,5 +111,3 @@ Motivation du choix:
 - Kibana : [http://88.169.46.187:5601/](http://88.169.46.187:9200/)
 - Serveur web : [http://34.215.22.13:5000/](http://34.215.22.13:5000/)
 - Serveur MQTT : 18.188.23.129:1883
-
-```
