@@ -1,0 +1,48 @@
+******CREATION DES INDEX 	**************************
+
+CREATE INDEX ON :Event(id);
+CREATE INDEX ON :UserEvent(actor_id);
+CREATE INDEX ON :Repo(repo_id);
+CREATE INDEX ON :Language(language_name);
+
+******CREATION DES TABLES 	ASSOCIEES **************************
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///GlobalT.csv" AS row 
+FIELDTERMINATOR ","
+MERGE (e:Event { type: row.type}) ON CREATE SET e.type= row.type,e.actor_login= row.actor_login
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///GlobalT.csv" AS row 
+FIELDTERMINATOR ","
+MERGE (u:UserEvent { actor_id: row.actor_id}) ON CREATE SET u.actor_login= row.actor_login
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///GlobalT.csv" AS row 
+FIELDTERMINATOR ","
+MERGE (r:Repo { repo_id: row.repo_id}) ON CREATE SET r.repo_name= row.repo_name
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///Glang.csv" AS row 
+FIELDTERMINATOR ","
+MERGE (l:Language { language_name: row.language_name}) ON CREATE SET r.repo_name= row.repo_name
+
+
+******CREATION DES RELATIONS **************************
+
+MATCH (e:Event),(u:UserEvent)
+WHERE e.actor_login= u.actor_login
+CREATE (e)<-[:TRIGGER]-(u)
+
+MATCH (l:Language),(r:Repo)
+WHERE l.repo_name = r.repo_name
+CREATE (l)-[:ASSOCIATE_TO]->(r)
+
+USING PERIODIC COMMIT
+LOAD CSV WITH HEADERS FROM "file:///GlobalT.csv" AS row 
+MATCH (u:UserEvent{actor_id: row.actor_id})
+MATCH (r:Repo{repo_id: row.repo_id})
+MERGE (u)-[:TRIGGER_IN]->(r)
+
+
+***********************************
